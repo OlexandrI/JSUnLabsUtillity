@@ -11,11 +11,28 @@
 		bottom: 17px;
 	}
 	
+	#tabs{
+		font-size: 14px;
+		min-height: 420px;
+	}
+	#tabs>div{
+		height: 100%;
+	}
 	</style>
 	<script>
 	 $(function(){
 		 $(document).tooltip({
 			 track: true
+			});
+		
+		 $("#tabs").tabs();
+		
+		 $(".variants").accordion({
+			 icons: {
+				 header: "ui-icon-circle-arrow-e",
+				 activeHeader: "ui-icon-circle-arrow-s"
+				},
+			 heightStyle: "fill"
 			});
 		 
 		 $(".resizable").css({
@@ -222,21 +239,70 @@
 	</script>
 </head>
 <body>
-<h1>Лабораторна робота №3 із теорії інформації!</h1>
+<div id="tabs">
+	<ul>
+		<li><a href="#tab_info">Інформація</a></li>
+		<li><a href="#tab_p1">Завдання 1 і 2</a></li>
+		<li><a href="#tab_p2">Завдання 3 і 4</a></li>
+		<li><a href="#tab_p3">Завдання 5</a></li>
+	</ul>
+	
+	<div id="tab_info">
+		<h1>Лабораторна робота №3 із теорії інформації!</h1>
+	 </div>
+	 
+	<div id="tab_p1">
+		<h2 id="р1" title="Переведіть задане число з десяткової системи числення в двійкову">Із десяткової в двійкову і навпаки (завдання 1 і 2)</h2>
+		<div class="variants">
+			<h3>Числа в десятковій системі</h3>
+			<div>
+				<textarea id="dec_in" class="resizable left" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Числа в двійковій системі</h3>
+			<div>
+				<textarea id="dec_out2" class="resizable" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Числа в вісімковій системі</h3>
+			<div>
+				<textarea id="dec_out8" class="resizable" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Числа в шістнадцятковій системі</h3>
+			<div>
+				<textarea id="dec_out16" class="resizable" title="Кожне число в новому рядку"></textarea>
+			 </div>
+		 </div>
+	 </div>
 
-<h2 id="z1" title="Переведіть задане число з десяткової системи числення в двійкову">Із десяткової в двійкову і навпаки (завдання 1 і 2)</h2>
-<textarea id="dec_in" class="resizable left" title="Числа в десятковій системі (кожне число в новому рядку)"></textarea>
-<textarea id="dec_out2" class="resizable" title="Числа в двійковій системі (кожне число в новому рядку)"></textarea>
-<textarea id="dec_out8" class="resizable" title="Числа в вісімковій системі (кожне число в новому рядку)"></textarea>
-<textarea id="dec_out16" class="resizable" title="Числа в шістнадцятковій системі (кожне число в новому рядку)"></textarea>
+	<div id="tab_p2">
+		<h2 id="р2" title="Зашифруйте/Дешифруйте наведений текст, використовуючи таблицю ASCII-кодів">Перевести текст в ASCII коди (завдання 3 і 4)</h2>
+		<div class="variants">
+			<h3>Нормальний текст</h3>
+			<div>
+				<textarea id="text_in" class="resizableW" title="Просто текст :)"></textarea>
+			 </div>
+			<h3>ASCII коди в двійковій системі</h3>
+			<div>
+				<textarea id="text_out2" class="resizableW help" title="Розділення пробілом"></textarea>
+			 </div>
+			<h3>ASCII коди в вісімковій системі</h3>
+			<div>
+				<textarea id="text_out8" class="resizableW help" title="Розділення пробілом"></textarea>
+			 </div>
+			<h3>ASCII коди в десятковій системі</h3>
+			<div>
+				<textarea id="text_out10" class="resizableW help" title="Розділення пробілом"></textarea>
+			 </div>
+			<h3>ASCII коди в шістнадцятковій системі</h3>
+			<div>
+				<textarea id="text_out16" class="resizableW help" title="Розділення пробілом"></textarea>
+			 </div>
+		 </div>
+	 </div>
 
+	<div id="tab_p3">
+		<h2 id="р3" title="">Взяти прямий і додатковий коди числа з/без знака</h2>
+	 </div>
 
-<h2 id="z3" title="Зашифруйте/Дешифруйте наведений текст, використовуючи таблицю ASCII-кодів">Перевести текст в ASCII коди (завдання 3 і 4)</h2>
-<textarea id="text_in" class="resizableW" title="Нормальний текст"></textarea>
-<textarea id="text_out2" class="resizableW help" title="ASCII коди в двійковій системі"></textarea>
-<textarea id="text_out8" class="resizableW help" title="ASCII коди в вісімковій системі"></textarea>
-<textarea id="text_out10" class="resizableW help" title="ASCII коди в десятковій системі"></textarea>
-<textarea id="text_out16" class="resizableW help" title="ASCII коди в шістнадцятковій системі"></textarea>
 
 </body>
 </html>
