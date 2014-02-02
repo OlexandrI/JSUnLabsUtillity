@@ -43,24 +43,73 @@
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split("\n");
+			 o.reverse();
 			 var i = o.length;
-			 var res = [];
+			 var res2 = [];
+			 var res8 = [];
+			 var res16 = [];
 			 while(i--){
-				 res.push(parseInt(o[i], 10).toString(2));
+				 res2.push(parseInt(o[i], 10).toString(2));
+				 res8.push(parseInt(o[i], 10).toString(8));
+				 res16.push(parseInt(o[i], 10).toString(16));
 				}
-			 $("#dec_out").val(res.reverse().join("\n"));
+			 $("#dec_out2").val(res2.join("\n"));
+			 $("#dec_out8").val(res8.join("\n"));
+			 $("#dec_out16").val(res16.join("\n"));
 			});
-		
-		 $("#dec_out").bind('input propertychange', function() {
+		 $("#dec_out2").bind('input propertychange', function() {
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split("\n");
+			 o.reverse();
 			 var i = o.length;
-			 var res = [];
+			 var res8 = [];
+			 var res10 = [];
+			 var res16 = [];
 			 while(i--){
-				 res.push(parseInt(o[i], 2).toString(10));
+				 res8.push(parseInt(o[i], 2).toString(8));
+				 res10.push(parseInt(o[i], 2).toString(10));
+				 res16.push(parseInt(o[i], 2).toString(16));
 				}
-			 $("#dec_in").val(res.reverse().join("\n"));
+			 $("#dec_out8").val(res8.join("\n"));
+			 $("#dec_in").val(res10.join("\n"));
+			 $("#dec_out16").val(res16.join("\n"));
+			});
+		 $("#dec_out8").bind('input propertychange', function() {
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res2 = [];
+			 var res10 = [];
+			 var res16 = [];
+			 while(i--){
+				 res2.push(parseInt(o[i], 8).toString(2));
+				 res10.push(parseInt(o[i], 8).toString(10));
+				 res16.push(parseInt(o[i], 8).toString(16));
+				}
+			 $("#dec_out2").val(res2.join("\n"));
+			 $("#dec_in").val(res10.join("\n"));
+			 $("#dec_out16").val(res16.join("\n"));
+			});
+		 $("#dec_out16").bind('input propertychange', function() {
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res2 = [];
+			 var res8 = [];
+			 var res10 = [];
+			 while(i--){
+				 res2.push(parseInt(o[i], 16).toString(2));
+				 res8.push(parseInt(o[i], 16).toString(8));
+				 res10.push(parseInt(o[i], 16).toString(10));
+				}
+			 $("#dec_out2").val(res2.join("\n"));
+			 $("#dec_out8").val(res8.join("\n"));
+			 $("#dec_in").val(res10.join("\n"));
 			});
 		
 		 $("#text_in").bind('input propertychange', function() {
@@ -177,7 +226,9 @@
 
 <h2 id="z1" title="Переведіть задане число з десяткової системи числення в двійкову">Із десяткової в двійкову і навпаки (завдання 1 і 2)</h2>
 <textarea id="dec_in" class="resizable left" title="Числа в десятковій системі (кожне число в новому рядку)"></textarea>
-<textarea id="dec_out" class="resizable" title="Числа в двійковій системі (кожне число в новому рядку)"></textarea>
+<textarea id="dec_out2" class="resizable" title="Числа в двійковій системі (кожне число в новому рядку)"></textarea>
+<textarea id="dec_out8" class="resizable" title="Числа в вісімковій системі (кожне число в новому рядку)"></textarea>
+<textarea id="dec_out16" class="resizable" title="Числа в шістнадцятковій системі (кожне число в новому рядку)"></textarea>
 
 
 <h2 id="z3" title="Зашифруйте/Дешифруйте наведений текст, використовуючи таблицю ASCII-кодів">Перевести текст в ASCII коди (завдання 3 і 4)</h2>
