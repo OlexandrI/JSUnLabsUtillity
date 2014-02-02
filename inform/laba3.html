@@ -37,6 +37,20 @@
 				}
 			 $("#dec_out").val(res.reverse().join("\n"));
 			});
+		
+		 $("#bin_in").bind('input propertychange', function() {
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 var i = o.length;
+			 var res = [];
+			 var q;
+			 while(i--){
+				 res.push(parseInt(o[i], 2).toString(10));
+				}
+			 $("#bin_out").val(res.reverse().join("\n"));
+			});
+		
 		});
 		
 	</script>
@@ -47,6 +61,11 @@
 <h2 id="z1">Із десяткової в двійкову (завдання 1)</h2>
 <textarea id="dec_in" class="resizable left"></textarea>
 <textarea id="dec_out" class="resizable" disabled></textarea>
+
+
+<h2 id="z2">Із двійкової в десяткову (завдання 2)</h2>
+<textarea id="bin_in" class="resizable left"></textarea>
+<textarea id="bin_out" class="resizable" disabled></textarea>
 
 </body>
 </html>
