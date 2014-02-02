@@ -7,15 +7,46 @@
 	<script src="../src/jquery.js"></script>
 	<script src="../src/ui/js/jquery-ui-1.10.4.custom.js"></script>
 	<style>
+	.ui-resizable-se {
+		bottom: 17px;
+	}
+	
 	</style>
 	<script>
 	 $(function(){
-		//$( "#button" ).button();
-	 });
+		 $(".resizable").css({
+			 height: '120px',
+			 width: '400px',
+			}).resizable({
+			 handles: "se",
+			 maxHeight: 250,
+			 maxWidth: 400,
+			 minHeight: 120,
+			 minWidth: 300
+			});
+		 
+		 $("#dec_in").bind('input propertychange', function() {
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 var i = o.length;
+			 var res = [];
+			 var q;
+			 while(i--){
+				 res.push(parseInt(o[i], 10).toString(2));
+				}
+			 $("#dec_out").val(res.reverse().join("\n"));
+			});
+		});
+		
 	</script>
 </head>
 <body>
 <h1>Лабораторна робота №3 із теорії інформації!</h1>
+
+<h2 id="z1">Із десяткової в двійкову (завдання 1)</h2>
+<textarea id="dec_in" class="resizable left"></textarea>
+<textarea id="dec_out" class="resizable" disabled></textarea>
 
 </body>
 </html>
