@@ -45,7 +45,6 @@
 			 o = o.split("\n");
 			 var i = o.length;
 			 var res = [];
-			 var q;
 			 while(i--){
 				 res.push(parseInt(o[i], 10).toString(2));
 				}
@@ -58,7 +57,6 @@
 			 o = o.split("\n");
 			 var i = o.length;
 			 var res = [];
-			 var q;
 			 while(i--){
 				 res.push(parseInt(o[i], 2).toString(10));
 				}
@@ -74,7 +72,6 @@
 			 var res8 = [];
 			 var res10 = [];
 			 var res16 = [];
-			 var q;
 			 while(i--){
 				 res2.push(o[i].charCodeAt().toString(2));
 				 res8.push(o[i].charCodeAt().toString(8));
@@ -85,6 +82,91 @@
 			 $("#text_out8").val(res8.reverse().join(" "));
 			 $("#text_out10").val(res10.reverse().join(" "));
 			 $("#text_out16").val(res16.reverse().join(" "));
+			});
+		
+		 $("#text_out2").bind('input propertychange', function() {
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split(" ");
+			 o.reverse();
+			 var i = o.length;
+			 var res = "";
+			 var res8 = [];
+			 var res10 = [];
+			 var res16 = [];
+			 while(i--){
+				 res+= String.fromCharCode(parseInt(o[i], 2));
+				 res8.push(parseInt(o[i], 2).toString(8));
+				 res10.push(parseInt(o[i], 2).toString(10));
+				 res16.push(parseInt(o[i], 2).toString(16));
+				}
+			 $("#text_in").val(res);
+			 $("#text_out8").val(res8.join(" "));
+			 $("#text_out10").val(res10.join(" "));
+			 $("#text_out16").val(res16.join(" "));
+			});
+		 $("#text_out8").bind('input propertychange', function() {
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split(" ");
+			 o.reverse();
+			 var i = o.length;
+			 var res = "";
+			 var res2 = [];
+			 var res10 = [];
+			 var res16 = [];
+			 while(i--){
+				 res+= String.fromCharCode(parseInt(o[i], 8));
+				 res2.push(parseInt(o[i], 8).toString(2));
+				 res10.push(parseInt(o[i], 8).toString(10));
+				 res16.push(parseInt(o[i], 8).toString(16));
+				}
+			 $("#text_in").val(res);
+			 $("#text_out2").val(res2.join(" "));
+			 $("#text_out10").val(res10.join(" "));
+			 $("#text_out16").val(res16.join(" "));
+			});
+		 $("#text_out10").bind('input propertychange', function() {
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split(" ");
+			 o.reverse();
+			 var i = o.length;
+			 var res = "";
+			 var res2 = [];
+			 var res8 = [];
+			 var res16 = [];
+			 while(i--){
+				 res+= String.fromCharCode(parseInt(o[i]));
+				 res2.push(parseInt(o[i]).toString(2));
+				 res8.push(parseInt(o[i]).toString(8));
+				 res16.push(parseInt(o[i]).toString(16));
+				}
+			 $("#text_in").val(res);
+			 $("#text_out2").val(res2.join(" "));
+			 $("#text_out8").val(res8.join(" "));
+			 $("#text_out16").val(res16.join(" "));
+			});
+		 $("#text_out16").bind('input propertychange', function() {
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split(" ");
+			 o.reverse();
+			 var i = o.length;
+			 var res = "";
+			 var res2 = [];
+			 var res8 = [];
+			 var res10 = [];
+			 while(i--){
+				 res+= String.fromCharCode(parseInt(o[i], 16));
+				 res2.push(parseInt(o[i], 16).toString(2));
+				 res8.push(parseInt(o[i], 16).toString(8));
+				 res10.push(parseInt(o[i], 16).toString(10));
+				}
+			 $("#text_in").val(res);
+			 $("#text_out2").val(res2.join(" "));
+			 $("#text_out8").val(res8.join(" "));
+			 $("#text_out10").val(res10.join(" "));
 			});
 		
 		});
