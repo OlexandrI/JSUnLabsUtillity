@@ -20,6 +20,52 @@
 	}
 	</style>
 	<script>
+	 String.STR_PAD_LEFT = 1;
+	 String.STR_PAD_RIGHT = 2;
+	 String.STR_PAD_BOTH = 3;
+	 String.prototype.pad = function(len, pad, dir){
+		 str = this;
+		 if(typeof(len) == "undefined") var len = 0;
+		 if(typeof(pad) == "undefined") var pad = ' ';
+		 if(typeof(dir) == "undefined") var dir = String.STR_PAD_LEFT;
+
+		 if(len + 1 >= str.length){
+			 switch (dir){
+				 case String.STR_PAD_LEFT:
+					 str = Array(len + 1 - str.length).join(pad) + str;
+					break;
+				 case String.STR_PAD_BOTH:
+					 var right = Math.ceil((padlen = len - str.length) / 2);
+					 var left = padlen - right;
+					 str = Array(left+1).join(pad) + str + Array(right+1).join(pad);
+					break;
+				 default:
+					 str = str + Array(len + 1 - str.length).join(pad);
+					break;
+				}
+			}else
+		 if(len < str.length){
+			 switch (dir){
+				 case String.STR_PAD_LEFT:
+					 str = str.substr(-len);
+					break;
+				 case String.STR_PAD_BOTH:
+					 str = str.substr(Math.ceil((str.length - len) / 2), len);
+					break;
+				 default:
+					 str = str.substr(0, len);
+					break;
+				}
+			}
+		 return str;
+		};
+	 Number.prototype.toFix = function(len, type){
+		 return this.toString(type).pad(len, "0", String.STR_PAD_LEFT);
+		}
+	 Number.prototype.Clamp = function(max, min){
+		 return this<min?min:this>max?max:this;
+		};
+	 
 	 $(function(){
 		 $(document).tooltip({
 			 track: true
@@ -56,7 +102,7 @@
 			 minWidth: 400
 			});
 		 
-		 $("#dec_in").bind('input propertychange', function() {
+		 $("#dec_in").bind('input propertychange', function(){
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split("\n");
@@ -74,7 +120,7 @@
 			 $("#dec_out8").val(res8.join("\n"));
 			 $("#dec_out16").val(res16.join("\n"));
 			});
-		 $("#dec_out2").bind('input propertychange', function() {
+		 $("#dec_out2").bind('input propertychange', function(){
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split("\n");
@@ -92,7 +138,7 @@
 			 $("#dec_in").val(res10.join("\n"));
 			 $("#dec_out16").val(res16.join("\n"));
 			});
-		 $("#dec_out8").bind('input propertychange', function() {
+		 $("#dec_out8").bind('input propertychange', function(){
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split("\n");
@@ -110,7 +156,7 @@
 			 $("#dec_in").val(res10.join("\n"));
 			 $("#dec_out16").val(res16.join("\n"));
 			});
-		 $("#dec_out16").bind('input propertychange', function() {
+		 $("#dec_out16").bind('input propertychange', function(){
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split("\n");
@@ -129,7 +175,7 @@
 			 $("#dec_in").val(res10.join("\n"));
 			});
 		
-		 $("#text_in").bind('input propertychange', function() {
+		 $("#text_in").bind('input propertychange', function(){
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split("");
@@ -149,7 +195,7 @@
 			 $("#text_out10").val(res10.reverse().join(" "));
 			 $("#text_out16").val(res16.reverse().join(" "));
 			});
-		 $("#text_out2").bind('input propertychange', function() {
+		 $("#text_out2").bind('input propertychange', function(){
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split(" ");
@@ -170,7 +216,7 @@
 			 $("#text_out10").val(res10.join(" "));
 			 $("#text_out16").val(res16.join(" "));
 			});
-		 $("#text_out8").bind('input propertychange', function() {
+		 $("#text_out8").bind('input propertychange', function(){
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split(" ");
@@ -191,7 +237,7 @@
 			 $("#text_out10").val(res10.join(" "));
 			 $("#text_out16").val(res16.join(" "));
 			});
-		 $("#text_out10").bind('input propertychange', function() {
+		 $("#text_out10").bind('input propertychange', function(){
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split(" ");
@@ -212,7 +258,7 @@
 			 $("#text_out8").val(res8.join(" "));
 			 $("#text_out16").val(res16.join(" "));
 			});
-		 $("#text_out16").bind('input propertychange', function() {
+		 $("#text_out16").bind('input propertychange', function(){
 			 if(!this.value.length) return;
 			 var o = this.value;
 			 o = o.split(" ");
@@ -234,6 +280,39 @@
 			 $("#text_out10").val(res10.join(" "));
 			});
 		
+		 $("#num_in").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res8w = [];
+			 var res8 = [];
+			 var res16w = [];
+			 var res16 = [];
+			 var q;
+			 while(i--){
+				 q = parseInt(o[i], 10);
+				 q.Clamp(-65535, 65535);
+				 res16w.push(Math.abs(q).toFix(16, 2));
+				 if(q>=0){
+					 res16.push("0"+q.toFix(15, 2));
+					}else{
+					 res16.push("1"+(65536+q).toFix(15, 2)+": "+Math.abs(q).toFix(15, 2)+"<>"+(65535+q).toFix(15, 2)+"+1");
+					}
+				 q.Clamp(-255, 255);
+				 res8w.push(Math.abs(q).toFix(8, 2));
+				 if(q>=0){
+					 res8.push("0"+q.toFix(7, 2));
+					}else{
+					 res8.push("1"+(256+q).toFix(7, 2)+": "+Math.abs(q).toFix(7, 2)+"<>"+(255+q).toFix(7, 2)+"+1");
+					}
+				}
+			 $("#num_out8w").val(res8w.join("\n"));
+			 $("#num_out8").val(res8.join("\n"));
+			 $("#num_out16w").val(res16w.join("\n"));
+			 $("#num_out16").val(res16.join("\n"));
+			});
 		});
 		
 	</script>
@@ -256,7 +335,7 @@
 		<div class="variants">
 			<h3>Числа в десятковій системі</h3>
 			<div>
-				<textarea id="dec_in" class="resizable left" title="Кожне число в новому рядку"></textarea>
+				<textarea id="dec_in" class="resizable" title="Кожне число в новому рядку"></textarea>
 			 </div>
 			<h3>Числа в двійковій системі</h3>
 			<div>
@@ -301,6 +380,28 @@
 
 	<div id="tab_p3">
 		<h2 id="р3" title="">Взяти прямий і додатковий коди числа з/без знака</h2>
+		<div class="variants">
+			<h3>Числа в десятковій системі (зі знаками)</h3>
+			<div>
+				<textarea id="num_in" class="resizable" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Прямі восьмибітні коди без знаків (модулі)</h3>
+			<div>
+				<textarea id="num_out8w" class="resizableW" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Додаткові восьмибітні коди зі знаками</h3>
+			<div>
+				<textarea id="num_out8" class="resizableW" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Прямі шістнадцятибітові коди без знаків (модулі)</h3>
+			<div>
+				<textarea id="num_out16w" class="resizableW" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Додаткові шістнадцятибітові коди зі знаками</h3>
+			<div>
+				<textarea id="num_out16" class="resizableW" title="Кожне число в новому рядку"></textarea>
+			 </div>
+		 </div>
 	 </div>
 
 
