@@ -47,13 +47,13 @@
 		 if(len < str.length){
 			 switch (dir){
 				 case String.STR_PAD_LEFT:
-					 str = str.substr(-len);
+					 str = str.substr(0, len);
 					break;
 				 case String.STR_PAD_BOTH:
 					 str = str.substr(Math.ceil((str.length - len) / 2), len);
 					break;
 				 default:
-					 str = str.substr(0, len);
+					 str = str.substr(-len);
 					break;
 				}
 			}
@@ -293,25 +293,92 @@
 			 var q;
 			 while(i--){
 				 q = parseInt(o[i], 10);
-				 q.Clamp(-65535, 65535);
+				 q.Clamp(-32768, 32767);
 				 res16w.push(Math.abs(q).toFix(16, 2));
 				 if(q>=0){
 					 res16.push("0"+q.toFix(15, 2));
 					}else{
-					 res16.push("1"+(65536+q).toFix(15, 2)+": "+Math.abs(q).toFix(15, 2)+"<>"+(65535+q).toFix(15, 2)+"+1");
+					 res16.push("1"+(32768+q).toFix(15, 2)+": "+Math.abs(q).toFix(15, 2)+"<>"+(32767+q).toFix(15, 2)+"+1");
 					}
-				 q.Clamp(-255, 255);
+				 q.Clamp(-128, 127);
 				 res8w.push(Math.abs(q).toFix(8, 2));
 				 if(q>=0){
 					 res8.push("0"+q.toFix(7, 2));
 					}else{
-					 res8.push("1"+(256+q).toFix(7, 2)+": "+Math.abs(q).toFix(7, 2)+"<>"+(255+q).toFix(7, 2)+"+1");
+					 res8.push("1"+(128+q).toFix(7, 2)+": "+Math.abs(q).toFix(7, 2)+"<>"+(127+q).toFix(7, 2)+"+1");
 					}
 				}
 			 $("#num_out8w").val(res8w.join("\n"));
 			 $("#num_out8").val(res8.join("\n"));
 			 $("#num_out16w").val(res16w.join("\n"));
 			 $("#num_out16").val(res16.join("\n"));
+			});
+		 $("#num_out8").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res = [];
+			 var res8w = [];
+			 var res16w = [];
+			 var res16 = [];
+			 var q;
+			 while(i--){
+				 q = o[i].pad(8, "0", String.STR_PAD_LEFT);
+				 if(q[0]=="1"){
+					 q = -128+parseInt(q.substr(1), 2);
+					}else{
+					 q = parseInt(q, 2);
+					}
+				 q.Clamp(-128, 127);
+				 res.push(q);
+				 res8w.push(Math.abs(q).toFix(8, 2));
+				 res16w.push(Math.abs(q).toFix(16, 2));
+				 if(q>=0){
+					 res16.push("0"+q.toFix(15, 2));
+					}else{
+					 res16.push("1"+(32768+q).toFix(15, 2)+": "+Math.abs(q).toFix(15, 2)+"<>"+(32767+q).toFix(15, 2)+"+1");
+					}
+				}
+			 $("#num_in").val(res.join("\n"));
+			 $("#num_out8w").val(res8w.join("\n"));
+			 $("#num_out16w").val(res16w.join("\n"));
+			 $("#num_out16").val(res16.join("\n"));
+			});
+		 $("#num_out16").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res = [];
+			 var res8w = [];
+			 var res8 = [];
+			 var res16w = [];
+			 var q;
+			 while(i--){
+				 q = o[i].pad(16, "0", String.STR_PAD_LEFT);
+				 if(q[0]=="1"){
+					 q = -32768+parseInt(q.substr(1), 2);
+					}else{
+					 q = parseInt(q, 2);
+					}
+				 q.Clamp(-32768, 32767);
+				 res.push(q);
+				 res16w.push(Math.abs(q).toFix(16, 2));
+				 q.Clamp(-128, 127);
+				 res8w.push(Math.abs(q).toFix(8, 2));
+				 if(q>=0){
+					 res8.push("0"+q.toFix(7, 2));
+					}else{
+					 res8.push("1"+(128+q).toFix(7, 2)+": "+Math.abs(q).toFix(7, 2)+"<>"+(127+q).toFix(7, 2)+"+1");
+					}
+				}
+			 $("#num_in").val(res.join("\n"));
+			 $("#num_out8").val(res8.join("\n"));
+			 $("#num_out8w").val(res8w.join("\n"));
+			 $("#num_out16w").val(res16w.join("\n"));
 			});
 		});
 		
@@ -379,7 +446,7 @@
 	 </div>
 
 	<div id="tab_p3">
-		<h2 id="р3" title="">Взяти прямий і додатковий коди числа з/без знака</h2>
+		<h2 id="р3" title="">Взяти прямий/додатковий коди числа без/з знака</h2>
 		<div class="variants">
 			<h3>Числа в десятковій системі (зі знаками)</h3>
 			<div>
@@ -387,7 +454,7 @@
 			 </div>
 			<h3>Прямі восьмибітні коди без знаків (модулі)</h3>
 			<div>
-				<textarea id="num_out8w" class="resizableW" title="Кожне число в новому рядку"></textarea>
+				<textarea id="num_out8w" class="resizableW" title="Кожне число в новому рядку" disabled></textarea>
 			 </div>
 			<h3>Додаткові восьмибітні коди зі знаками</h3>
 			<div>
@@ -395,7 +462,7 @@
 			 </div>
 			<h3>Прямі шістнадцятибітові коди без знаків (модулі)</h3>
 			<div>
-				<textarea id="num_out16w" class="resizableW" title="Кожне число в новому рядку"></textarea>
+				<textarea id="num_out16w" class="resizableW" title="Кожне число в новому рядку" disabled></textarea>
 			 </div>
 			<h3>Додаткові шістнадцятибітові коди зі знаками</h3>
 			<div>
