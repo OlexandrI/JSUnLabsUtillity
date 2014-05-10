@@ -1,0 +1,481 @@
+﻿<!doctype html>
+<html lang="us">
+<head>
+	<meta charset="utf-8">
+	<title>Лабораторна робота №1 із теорії інформації</title>
+	<link href="../src/ui/css/mint-choc/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+	<script src="../src/jquery.js"></script>
+	<script src="../src/ui/js/jquery-ui-1.10.4.custom.js"></script>
+	<style>
+	.ui-resizable-se {
+		bottom: 17px;
+	}
+	
+	#tabs{
+		font-size: 14px;
+		min-height: 420px;
+	}
+	#tabs>div{
+		min-height: 400px;
+	}
+	iframe{
+		width: 100%;
+		height: 480px;
+	}
+	</style>
+	<script>
+	 String.STR_PAD_LEFT = 1;
+	 String.STR_PAD_RIGHT = 2;
+	 String.STR_PAD_BOTH = 3;
+	 String.prototype.pad = function(len, pad, dir){
+		 str = this;
+		 if(typeof(len) == "undefined") var len = 0;
+		 if(typeof(pad) == "undefined") var pad = ' ';
+		 if(typeof(dir) == "undefined") var dir = String.STR_PAD_LEFT;
+
+		 if(len + 1 >= str.length){
+			 switch (dir){
+				 case String.STR_PAD_LEFT:
+					 str = Array(len + 1 - str.length).join(pad) + str;
+					break;
+				 case String.STR_PAD_BOTH:
+					 var right = Math.ceil((padlen = len - str.length) / 2);
+					 var left = padlen - right;
+					 str = Array(left+1).join(pad) + str + Array(right+1).join(pad);
+					break;
+				 default:
+					 str = str + Array(len + 1 - str.length).join(pad);
+					break;
+				}
+			}else
+		 if(len < str.length){
+			 switch (dir){
+				 case String.STR_PAD_LEFT:
+					 str = str.substr(0, len);
+					break;
+				 case String.STR_PAD_BOTH:
+					 str = str.substr(Math.ceil((str.length - len) / 2), len);
+					break;
+				 default:
+					 str = str.substr(-len);
+					break;
+				}
+			}
+		 return str;
+		};
+	 Number.prototype.toFix = function(len, type){
+		 return this.toString(type).pad(len, "0", String.STR_PAD_LEFT);
+		}
+	 Number.prototype.Clamp = function(max, min){
+		 return this<min?min:this>max?max:this;
+		};
+	 
+	 $(function(){
+		 $(document).tooltip({
+			 track: true
+			});
+		
+		 $("#tabs").tabs();
+		
+		 $(".variants").accordion({
+			 icons: {
+				 header: "ui-icon-circle-arrow-e",
+				 activeHeader: "ui-icon-circle-arrow-s"
+				},
+			 heightStyle: "fill"
+			});
+		 
+		 $(".resizable").css({
+			 height: '80px',
+			 width: '300px',
+			}).resizable({
+			 handles: "se",
+			 maxHeight: 250,
+			 maxWidth: 400,
+			 minHeight: 80,
+			 minWidth: 300
+			});
+		 $(".resizableW").css({
+			 height: '120px',
+			 width: '720px',
+			}).resizable({
+			 handles: "se",
+			 maxHeight: 300,
+			 maxWidth: 800,
+			 minHeight: 120,
+			 minWidth: 400
+			});
+		 
+		 $("#dec_in").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res2 = [];
+			 var res8 = [];
+			 var res16 = [];
+			 while(i--){
+				 res2.push(parseInt(o[i], 10).toString(2));
+				 res8.push(parseInt(o[i], 10).toString(8));
+				 res16.push(parseInt(o[i], 10).toString(16));
+				}
+			 $("#dec_out2").val(res2.join("\n"));
+			 $("#dec_out8").val(res8.join("\n"));
+			 $("#dec_out16").val(res16.join("\n"));
+			});
+		 $("#dec_out2").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res8 = [];
+			 var res10 = [];
+			 var res16 = [];
+			 while(i--){
+				 res8.push(parseInt(o[i], 2).toString(8));
+				 res10.push(parseInt(o[i], 2).toString(10));
+				 res16.push(parseInt(o[i], 2).toString(16));
+				}
+			 $("#dec_out8").val(res8.join("\n"));
+			 $("#dec_in").val(res10.join("\n"));
+			 $("#dec_out16").val(res16.join("\n"));
+			});
+		 $("#dec_out8").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res2 = [];
+			 var res10 = [];
+			 var res16 = [];
+			 while(i--){
+				 res2.push(parseInt(o[i], 8).toString(2));
+				 res10.push(parseInt(o[i], 8).toString(10));
+				 res16.push(parseInt(o[i], 8).toString(16));
+				}
+			 $("#dec_out2").val(res2.join("\n"));
+			 $("#dec_in").val(res10.join("\n"));
+			 $("#dec_out16").val(res16.join("\n"));
+			});
+		 $("#dec_out16").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res2 = [];
+			 var res8 = [];
+			 var res10 = [];
+			 while(i--){
+				 res2.push(parseInt(o[i], 16).toString(2));
+				 res8.push(parseInt(o[i], 16).toString(8));
+				 res10.push(parseInt(o[i], 16).toString(10));
+				}
+			 $("#dec_out2").val(res2.join("\n"));
+			 $("#dec_out8").val(res8.join("\n"));
+			 $("#dec_in").val(res10.join("\n"));
+			});
+		
+		 $("#text_in").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("");
+			 var i = o.length;
+			 var res2 = [];
+			 var res8 = [];
+			 var res10 = [];
+			 var res16 = [];
+			 while(i--){
+				 res2.push(o[i].charCodeAt().toString(2));
+				 res8.push(o[i].charCodeAt().toString(8));
+				 res10.push(o[i].charCodeAt().toString(10));
+				 res16.push(o[i].charCodeAt().toString(16));
+				}
+			 $("#text_out2").val(res2.reverse().join(" "));
+			 $("#text_out8").val(res8.reverse().join(" "));
+			 $("#text_out10").val(res10.reverse().join(" "));
+			 $("#text_out16").val(res16.reverse().join(" "));
+			});
+		 $("#text_out2").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split(" ");
+			 o.reverse();
+			 var i = o.length;
+			 var res = "";
+			 var res8 = [];
+			 var res10 = [];
+			 var res16 = [];
+			 while(i--){
+				 res+= String.fromCharCode(parseInt(o[i], 2));
+				 res8.push(parseInt(o[i], 2).toString(8));
+				 res10.push(parseInt(o[i], 2).toString(10));
+				 res16.push(parseInt(o[i], 2).toString(16));
+				}
+			 $("#text_in").val(res);
+			 $("#text_out8").val(res8.join(" "));
+			 $("#text_out10").val(res10.join(" "));
+			 $("#text_out16").val(res16.join(" "));
+			});
+		 $("#text_out8").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split(" ");
+			 o.reverse();
+			 var i = o.length;
+			 var res = "";
+			 var res2 = [];
+			 var res10 = [];
+			 var res16 = [];
+			 while(i--){
+				 res+= String.fromCharCode(parseInt(o[i], 8));
+				 res2.push(parseInt(o[i], 8).toString(2));
+				 res10.push(parseInt(o[i], 8).toString(10));
+				 res16.push(parseInt(o[i], 8).toString(16));
+				}
+			 $("#text_in").val(res);
+			 $("#text_out2").val(res2.join(" "));
+			 $("#text_out10").val(res10.join(" "));
+			 $("#text_out16").val(res16.join(" "));
+			});
+		 $("#text_out10").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split(" ");
+			 o.reverse();
+			 var i = o.length;
+			 var res = "";
+			 var res2 = [];
+			 var res8 = [];
+			 var res16 = [];
+			 while(i--){
+				 res+= String.fromCharCode(parseInt(o[i]));
+				 res2.push(parseInt(o[i]).toString(2));
+				 res8.push(parseInt(o[i]).toString(8));
+				 res16.push(parseInt(o[i]).toString(16));
+				}
+			 $("#text_in").val(res);
+			 $("#text_out2").val(res2.join(" "));
+			 $("#text_out8").val(res8.join(" "));
+			 $("#text_out16").val(res16.join(" "));
+			});
+		 $("#text_out16").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split(" ");
+			 o.reverse();
+			 var i = o.length;
+			 var res = "";
+			 var res2 = [];
+			 var res8 = [];
+			 var res10 = [];
+			 while(i--){
+				 res+= String.fromCharCode(parseInt(o[i], 16));
+				 res2.push(parseInt(o[i], 16).toString(2));
+				 res8.push(parseInt(o[i], 16).toString(8));
+				 res10.push(parseInt(o[i], 16).toString(10));
+				}
+			 $("#text_in").val(res);
+			 $("#text_out2").val(res2.join(" "));
+			 $("#text_out8").val(res8.join(" "));
+			 $("#text_out10").val(res10.join(" "));
+			});
+		
+		 $("#num_in").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res8w = [];
+			 var res8 = [];
+			 var res16w = [];
+			 var res16 = [];
+			 var q;
+			 while(i--){
+				 q = parseInt(o[i], 10);
+				 q.Clamp(-32768, 32767);
+				 res16w.push(Math.abs(q).toFix(16, 2));
+				 if(q>=0){
+					 res16.push("0"+q.toFix(15, 2));
+					}else{
+					 res16.push("1"+(32768+q).toFix(15, 2)+": "+Math.abs(q).toFix(15, 2)+"<>"+(32767+q).toFix(15, 2)+"+1");
+					}
+				 q.Clamp(-128, 127);
+				 res8w.push(Math.abs(q).toFix(8, 2));
+				 if(q>=0){
+					 res8.push("0"+q.toFix(7, 2));
+					}else{
+					 res8.push("1"+(128+q).toFix(7, 2)+": "+Math.abs(q).toFix(7, 2)+"<>"+(127+q).toFix(7, 2)+"+1");
+					}
+				}
+			 $("#num_out8w").val(res8w.join("\n"));
+			 $("#num_out8").val(res8.join("\n"));
+			 $("#num_out16w").val(res16w.join("\n"));
+			 $("#num_out16").val(res16.join("\n"));
+			});
+		 $("#num_out8").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res = [];
+			 var res8w = [];
+			 var res16w = [];
+			 var res16 = [];
+			 var q;
+			 while(i--){
+				 q = o[i].pad(8, "0", String.STR_PAD_LEFT);
+				 if(q[0]=="1"){
+					 q = -128+parseInt(q.substr(1), 2);
+					}else{
+					 q = parseInt(q, 2);
+					}
+				 q.Clamp(-128, 127);
+				 res.push(q);
+				 res8w.push(Math.abs(q).toFix(8, 2));
+				 res16w.push(Math.abs(q).toFix(16, 2));
+				 if(q>=0){
+					 res16.push("0"+q.toFix(15, 2));
+					}else{
+					 res16.push("1"+(32768+q).toFix(15, 2)+": "+Math.abs(q).toFix(15, 2)+"<>"+(32767+q).toFix(15, 2)+"+1");
+					}
+				}
+			 $("#num_in").val(res.join("\n"));
+			 $("#num_out8w").val(res8w.join("\n"));
+			 $("#num_out16w").val(res16w.join("\n"));
+			 $("#num_out16").val(res16.join("\n"));
+			});
+		 $("#num_out16").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 var o = this.value;
+			 o = o.split("\n");
+			 o.reverse();
+			 var i = o.length;
+			 var res = [];
+			 var res8w = [];
+			 var res8 = [];
+			 var res16w = [];
+			 var q;
+			 while(i--){
+				 q = o[i].pad(16, "0", String.STR_PAD_LEFT);
+				 if(q[0]=="1"){
+					 q = -32768+parseInt(q.substr(1), 2);
+					}else{
+					 q = parseInt(q, 2);
+					}
+				 q.Clamp(-32768, 32767);
+				 res.push(q);
+				 res16w.push(Math.abs(q).toFix(16, 2));
+				 q.Clamp(-128, 127);
+				 res8w.push(Math.abs(q).toFix(8, 2));
+				 if(q>=0){
+					 res8.push("0"+q.toFix(7, 2));
+					}else{
+					 res8.push("1"+(128+q).toFix(7, 2)+": "+Math.abs(q).toFix(7, 2)+"<>"+(127+q).toFix(7, 2)+"+1");
+					}
+				}
+			 $("#num_in").val(res.join("\n"));
+			 $("#num_out8").val(res8.join("\n"));
+			 $("#num_out8w").val(res8w.join("\n"));
+			 $("#num_out16w").val(res16w.join("\n"));
+			});
+		});
+		
+	</script>
+</head>
+<body>
+<div id="tabs">
+	<ul>
+		<li><a href="#tab_info">Інформація</a></li>
+		<li><a href="#tab_p1">Завдання 1 і 4</a></li>
+		<li><a href="#tab_p2">Завдання 3 і 4</a></li>
+		<li><a href="#tab_p3">Завдання 5-9</a></li>
+	</ul>
+	
+	<div id="tab_info">
+		<h1>Лабораторна робота №1 із теорії інформації!</h1>
+		<iframe src="">
+		 </iframe>
+	 </div>
+	 
+	<div id="tab_p1">
+		<h2 id="р1" title="Переведіть задане число з десяткової системи числення в двійкову">Переведення чисел між системами: десятковою, двійковою, вісімковою і шістнадцятковою (завдання 1 і 4)</h2>
+		<div class="variants">
+			<h3>Числа в десятковій системі</h3>
+			<div>
+				<textarea id="dec_in" class="resizable" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Числа в двійковій системі</h3>
+			<div>
+				<textarea id="dec_out2" class="resizable" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Числа в вісімковій системі</h3>
+			<div>
+				<textarea id="dec_out8" class="resizable" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Числа в шістнадцятковій системі</h3>
+			<div>
+				<textarea id="dec_out16" class="resizable" title="Кожне число в новому рядку"></textarea>
+			 </div>
+		 </div>
+	 </div>
+
+	<div id="tab_p2">
+		<h2 id="р2" title="Зашифруйте/Дешифруйте наведений текст, використовуючи таблицю ASCII-кодів">Перевести текст в ASCII коди (завдання 3 і 4)</h2>
+		<div class="variants">
+			<h3>Нормальний текст</h3>
+			<div>
+				<textarea id="text_in" class="resizableW" title="Просто текст :)"></textarea>
+			 </div>
+			<h3>ASCII коди в двійковій системі</h3>
+			<div>
+				<textarea id="text_out2" class="resizableW help" title="Розділення пробілом"></textarea>
+			 </div>
+			<h3>ASCII коди в вісімковій системі</h3>
+			<div>
+				<textarea id="text_out8" class="resizableW help" title="Розділення пробілом"></textarea>
+			 </div>
+			<h3>ASCII коди в десятковій системі</h3>
+			<div>
+				<textarea id="text_out10" class="resizableW help" title="Розділення пробілом"></textarea>
+			 </div>
+			<h3>ASCII коди в шістнадцятковій системі</h3>
+			<div>
+				<textarea id="text_out16" class="resizableW help" title="Розділення пробілом"></textarea>
+			 </div>
+		 </div>
+	 </div>
+
+	<div id="tab_p3">
+		<h2 id="р3" title="">Взяти прямий/додатковий коди числа без/з знака</h2>
+		<div class="variants">
+			<h3>Числа в десятковій системі (зі знаками)</h3>
+			<div>
+				<textarea id="num_in" class="resizable" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Прямі восьмибітні коди без знаків (модулі)</h3>
+			<div>
+				<textarea id="num_out8w" class="resizableW" title="Кожне число в новому рядку" disabled></textarea>
+			 </div>
+			<h3>Додаткові восьмибітні коди зі знаками</h3>
+			<div>
+				<textarea id="num_out8" class="resizableW" title="Кожне число в новому рядку"></textarea>
+			 </div>
+			<h3>Прямі шістнадцятибітові коди без знаків (модулі)</h3>
+			<div>
+				<textarea id="num_out16w" class="resizableW" title="Кожне число в новому рядку" disabled></textarea>
+			 </div>
+			<h3>Додаткові шістнадцятибітові коди зі знаками</h3>
+			<div>
+				<textarea id="num_out16" class="resizableW" title="Кожне число в новому рядку"></textarea>
+			 </div>
+		 </div>
+	 </div>
+
+</body>
+</html>
