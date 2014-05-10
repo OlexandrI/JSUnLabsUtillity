@@ -36,12 +36,30 @@ String.prototype.pad = function(len, pad, dir){
 		}
 	 return str;
 	};
+
 Number.prototype.toFix = function(len, type){
 	 return this.toString(type).pad(len, "0", String.STR_PAD_LEFT);
 	}
 Number.prototype.Clamp = function(max, min){
 	 return this<min?min:this>max?max:this;
 	};
+
+Array.prototype.FindItem = function(item){
+	 var i = this.length;
+	 while(i--){
+		 if(this[i]==item) return i;
+		}
+	 return -1;
+	}
+Array.prototype.FindSameArray = function(arr){
+	 var i = this.length, f;
+	 if(typeof this.toSource=="undefined") f = 'toString';
+		else f = 'toSource';
+	 while(i--){
+		 if(this[i][f]()==arr[f]()) return i;
+		}
+	 return -1;
+	}
 
 jQuery.fn.change = function(f){
 	 this.bind('input propertychange', f);
