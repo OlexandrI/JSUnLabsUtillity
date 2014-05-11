@@ -52,13 +52,19 @@ Array.prototype.FindItem = function(item){
 	 return -1;
 	}
 Array.prototype.FindSameArray = function(arr){
-	 var i = this.length, f;
+	 var i = this.length, q = 0, f;
 	 if(typeof this.toSource=="undefined") f = 'toString';
 		else f = 'toSource';
-	 while(i--){
-		 if(this[i][f]()==arr[f]()) return i;
+	 while(q<i){
+		 if(this[q++][f]()==arr[f]()) return --q;
 		}
 	 return -1;
+	};
+Array.prototype.each = function(f){
+	 for(var k in this) if(this.hasOwnProperty(k)){
+		 if(f.call(this, this[k], k)===false) break;
+		}
+	 return this;
 	}
 
 jQuery.fn.change = function(f){
