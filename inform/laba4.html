@@ -307,7 +307,8 @@
 				 this.headers.push(carets[i][0]+"("+carets[i][0].charCodeAt()+")");
 				 this.vals.push(carets[i][1]);
 				};
-			 this.carets = this.carets.reverse(); // Fix sort: to desc
+			 // No!
+			 //this.carets = this.carets.reverse(); // Fix sort: to desc
 			 this.levels = ["<tr><td>"+this.headers.join("</td><td>")+"</td></tr>"];
 			 this.count = this.names.length;
 			
@@ -457,7 +458,9 @@
 			 var i = o.length;
 			 var symbls = {};
 			// Count Symbols
+			// TODO: convert " " to "space"
 			 while(i--){
+				 //if(o[i]==" ") o[i] = "(space)";
 				 if(typeof symbls[o[i]]=="undefined") symbls[o[i]] = 0;
 				 symbls[o[i]]++;
 				}

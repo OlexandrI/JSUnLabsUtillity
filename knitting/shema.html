@@ -1,0 +1,203 @@
+﻿<!doctype html>
+<html lang="us">
+<head>
+	<meta charset="utf-8">
+	<title>After Effects TricksPack-#1</title>
+	<link href="../src/ui/css/mint-choc/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+	<script src="../src/jquery.js"></script>
+	<script src="../src/ui/js/jquery-ui-1.10.4.custom.js"></script>
+	<style>
+	.ui-resizable-se {
+		bottom: 17px;
+	}
+	
+	#tabs{
+		font-size: 14px;
+		min-height: 640px;
+		height: 90%;
+	}
+	#tabs>div{
+		min-height: 620px;
+		height: 90%;
+	}
+	iframe{
+		width: 100%;
+		height: 480px;
+	}
+	</style>
+	<script>
+	 String.STR_PAD_LEFT = 1;
+	 String.STR_PAD_RIGHT = 2;
+	 String.STR_PAD_BOTH = 3;
+	 String.prototype.pad = function(len, pad, dir){
+		 str = this;
+		 if(typeof(len) == "undefined") var len = 0;
+		 if(typeof(pad) == "undefined") var pad = ' ';
+		 if(typeof(dir) == "undefined") var dir = String.STR_PAD_LEFT;
+
+		 if(len + 1 >= str.length){
+			 switch (dir){
+				 case String.STR_PAD_LEFT:
+					 str = Array(len + 1 - str.length).join(pad) + str;
+					break;
+				 case String.STR_PAD_BOTH:
+					 var right = Math.ceil((padlen = len - str.length) / 2);
+					 var left = padlen - right;
+					 str = Array(left+1).join(pad) + str + Array(right+1).join(pad);
+					break;
+				 default:
+					 str = str + Array(len + 1 - str.length).join(pad);
+					break;
+				}
+			}else
+		 if(len < str.length){
+			 switch (dir){
+				 case String.STR_PAD_LEFT:
+					 str = str.substr(0, len);
+					break;
+				 case String.STR_PAD_BOTH:
+					 str = str.substr(Math.ceil((str.length - len) / 2), len);
+					break;
+				 default:
+					 str = str.substr(-len);
+					break;
+				}
+			}
+		 return str;
+		};
+	 Number.prototype.toFix = function(len, type){
+		 return this.toString(type).pad(len, "0", String.STR_PAD_LEFT);
+		}
+	 Number.prototype.Clamp = function(max, min){
+		 return this<min?min:this>max?max:this;
+		};
+	 
+	 $(function(){
+		 $(document).tooltip({
+			 track: true
+			});
+		
+		 $("#tabs").tabs();
+		
+		 $(".variants").accordion({
+			 icons: {
+				 header: "ui-icon-circle-arrow-e",
+				 activeHeader: "ui-icon-circle-arrow-s"
+				},
+			 heightStyle: "fill"
+			});
+		 
+		 $(".resizable").css({
+			 height: '80px',
+			 width: '300px',
+			}).resizable({
+			 handles: "se",
+			 maxHeight: 250,
+			 maxWidth: 400,
+			 minHeight: 80,
+			 minWidth: 300
+			});
+		 $(".resizableW").css({
+			 height: '120px',
+			 width: '720px',
+			}).resizable({
+			 handles: "se",
+			 maxHeight: 300,
+			 maxWidth: 800,
+			 minHeight: 120,
+			 minWidth: 400
+			});
+		 
+		 BuildTransfCoords = function(){
+			 var ly = $("#layer").val();
+			 var pr = $("#parametr").val();
+			 var pr_x = $("#parametr_x").val();
+			 var pr_y = $("#parametr_y").val();
+			 var md_x = parseFloat($("#center_coords_x").val());
+			 var md_y = parseFloat($("#center_coords_y").val());
+			 var of_x = parseFloat($("#offset_coords_x").val());
+			 var of_y = parseFloat($("#offset_coords_y").val());
+			 var R = Math.abs(parseFloat($("#radius").val()));
+			 
+			 if(ly==''||(!pr&&(!pr_x||!pr_y))||isNaN(md_x)||isNaN(md_y)||isNaN(of_x)||isNaN(of_y)||isNaN(R)) return;
+			 
+			 var x = [];
+			 x.push('(thisComp.layer("');
+			 x.push(ly);
+			 x.push('").');
+			 if(pr!='') x.push(pr+'.');
+			 if(pr_x!='') x.push(pr_x);
+			 if(md_x!=0) x.push("-"+md_x);
+			 if(of_x!=0) x.push("+"+of_x);
+			 x.push(')');
+			 x = x.join("");
+			 
+			 var y = [];
+			 y.push('(thisComp.layer("');
+			 y.push(ly);
+			 y.push('").');
+			 if(pr!='') y.push(pr+'.');
+			 if(pr_y!='') y.push(pr_y);
+			 if(md_y!=0) y.push("-"+md_y);
+			 if(of_y!=0) y.push("+"+of_y);
+			 y.push(')');
+			 y = y.join("");
+			 
+			 $("#Altitude").val('90*(1-(Math.sqrt('+x+'*'+x+'+'+y+'*'+y+')/'+R+'))');
+			 $("#Azimuth").val('radiansToDegrees(Math.atan2(-1*'+x+', -1*'+y+'))');
+			 $("#Rotation").val('-1*effect("Fulldome")("Azimuth (o)")');
+			};
+		 
+		 $("#tab_p1 input").bind('input propertychange', function(){
+			 if(!this.value.length) return;
+			 BuildTransfCoords();
+			});
+		
+		 BuildTransfCoords();
+		});
+		
+	</script>
+</head>
+<body>
+<div id="tabs">
+	<ul>
+		<li><a href="#tab_info">Інформація</a></li>
+		<li><a href="#tab_p1">Перетворення координат для FullDome</a></li>
+	</ul>
+	
+	<div id="tab_info">
+		<h1>Набір математичних утиліт і підказок для AfterEffects!</h1>
+	 </div>
+	 
+	<div id="tab_p1">
+		<h2 id="р1" title="Перетворення координат для FullDome">Перетворення координат для FullDome</h2>
+		<div class="variants">
+			<h3>Назва слою з якого беруться координати</h3>
+			<div>
+				Слой <input type="text" id="layer" class="" title="Слой" value="Null 1" /></br>
+				Параметр <input type="text" id="parametr" class="" title="Параметр" value="transform" /></br>
+				Для X <input type="text" id="parametr_x" class="" title="Вираз для X" value="position[0]" /></br>
+				Для Y <input type="text" id="parametr_y" class="" title="Вираз для Y" value="position[1]" /></br>
+				Радіус <input type="text" id="radius" class="" title="Радіус" value="1024" /></br>
+			 </div>
+			<h3>Координати центру</h3>
+			<div>
+				X = <input type="text" id="center_coords_x" class="" title="X координата центру" value="1024" /></br>
+				Y = <input type="text" id="center_coords_y" class="" title="Y координата центру" value="1024" />
+			 </div>
+			<h3>Зміщення позиції</h3>
+			<div>
+				X = <input type="text" id="offset_coords_x" class="" title="X координата зміщення" value="0" /></br>
+				Y = <input type="text" id="offset_coords_y" class="" title="Y координата зміщення" value="0" />
+			 </div>
+			<h3>Результат</h3>
+			<div>
+				Altitude Expression = <textarea id="Altitude" class="resizableW" title="Вираз для параметру Altitude" disabled></textarea></br>
+				Azimuth Expression = <textarea id="Azimuth" class="resizableW" title="Вираз для параметру Azimuth" disabled ></textarea></br>
+				Rotation Expression = <textarea id="Rotation" class="resizableW" title="Вираз для параметру Rotation" disabled ></textarea>
+			 </div>
+		 </div>
+	 </div>
+</div>
+</body>
+</html>
